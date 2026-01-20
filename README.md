@@ -1,20 +1,33 @@
-# Warning
+# Genius Annotations & Lyrics
+Displays the current song's lyrics, annotations and description sourced from [Genius](https://genius.com)  
+Includes a list of available translations, as well as the link to the song page on Genius at the bottom of the lyrics.
 
-This project is deprecated and should not be used for bundling spicetify extensions or custom apps. Please use [`esbuild`](https://esbuild.github.io/), [`Bun's bundler`](https://bun.com/docs/bundler), [`Rollup`](https://rollupjs.org/) or [`webpack`](https://webpack.js.org/)/[`rspack`](https://rspack.rs/) with your own config. This project won't be receiving any more updates until further notice.
+## Installation
+### Automatic (Windows, Powershell)
+1. Open Powershell
+2. Run:
+```
+iwr -useb "https://raw.githubusercontent.com/aamiryatali/genius-annotations/refs/heads/main/install.ps1" | iex
+```
 
-# Spicetify Creator
+### Manual
+1. Download the latest release
+2. Extract to your CustomApps folder (Windows default: ```%appdata%\spicetify\CustomApps```) 
+3. Run:
+```
+spicetify config custom_apps genius-annotations
+spicetify apply
+```
+Done.  
+If installation was successful, this button should appear on the top left of Spotify:  
+<img src="resources/icon.png" width="50" height="50" />
 
-Spicetify Creator is a tool to compile modern Typescript/Javascript code to Spicetify extensions and custom apps.
+## Previews
+### Description, lyrics and annotations
+<img src="resources/mainPreview.png" width="500" height="500"/>
 
-## Features
-- Typescript and React syntax
-- Import node packages
-- CSS/SCSS with PostCSS support
-- Extremely fast compile time with esbuild.
-- Plugins
+### Translations
+<img src="resources/translationPreview.png" width="500" height="500" />
 
-## Docs
-Check out [Spicetify's docs](https://spicetify.app/docs/development/spicetify-creator/the-basics)!
-
-## Made with Spicetify Creator
-- https://github.com/spicetify/spicetify-creator
+### Annotations
+<img src="resources/annotationPreview.png" width="500" height="500" />
