@@ -20,8 +20,7 @@ export default function Lyrics({lyrics, annotations}: {lyrics: Map<number, strin
                             <span
                             className=
                             {`
-                            ${annotation ? styles.lyrics_text_annotated : styles.lyrics_text} 
-                            ${hoveredAnnotationId === annotation?.id ? styles.hovered : ""}
+                            ${annotation ? styles.lyrics_text_annotated : styles.lyrics_text}
                             `}
                             data-annotation-id={annotation?.id}
                             data-lyricIndex={lyricIndex} 

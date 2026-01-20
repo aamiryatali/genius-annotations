@@ -1,5 +1,5 @@
 import styles from './css/app.module.scss'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Lyrics from './components/Lyrics';
 import Description from './components/Description';
 import { usePlayerState } from './hooks/usePlayerState';
@@ -11,6 +11,14 @@ const App: React.FC = () => {
 	const {playerState, debounceRef} = usePlayerState(setIsLoading, 727);
 	const {selectedSongId, setSelectedSongId, searchHits} = useSearchSong(setIsLoading, playerState);
 	const {lyrics, annotations, description, url} = useSongData(setIsLoading, selectedSongId);
+
+	useEffect(() => {
+		const topBar = document.querySelector(".main-topBar-container");
+		if(!topBar) return;
+		topBar.classList.add(styles.disabled)
+
+		return () => {topBar.classList.remove(styles.disabled)};
+	}, [])
 
 	return (
   		<>

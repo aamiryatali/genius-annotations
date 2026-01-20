@@ -1,6 +1,5 @@
 {
   "displayName": "Genius Annotations & Lyrics",
   "nameId": "genius-annotations",
-  "icon": "css/icon.svg",
-  "activeIcon": "css/icon.svg"
+  "icon": "css/icon.svg"
 }

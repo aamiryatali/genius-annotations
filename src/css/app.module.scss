@@ -56,18 +56,10 @@
   color: black;
 }
 
-.lyrics_container {
-  display: inline;
-  padding: 60px 100px 60px 100px;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 1em;
-}
-
 .lyrics_text {
   font-size: 20px;
   white-space: pre-wrap;
+  padding: 0.1px;
 }
 
 .lyrics_text_annotated {
@@ -75,6 +67,20 @@
   background-color: hsl(97.73deg 100% 50%);
   color: black;
   white-space: pre-wrap;
+  padding: 0.1px;
+}
+
+.lyrics_text_annotated:hover {
+  background-color: hsl(142deg 76% 48%);
+}
+
+.lyrics_container {
+  display: inline;
+  padding: 60px 100px 60px 100px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1em;
 }
 
 .description_container {
@@ -95,10 +101,6 @@
   margin: 0;
 }
 
-.hovered {
-  background-color: hsl(142deg 76% 48%);
-}
-
 .button {
   padding: 7px 10px 7px 10px;
   border-radius: 10px;
@@ -114,4 +116,9 @@
   &:active {
     background-color: rgb(228, 228, 228);
   }
+}
+
+.disabled {
+  opacity: 0;
+  pointer-events: none;
 }
