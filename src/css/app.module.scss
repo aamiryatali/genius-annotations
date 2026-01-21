@@ -24,8 +24,8 @@
 }
 
 .translation_select {
-  width: 100%;           /* fills the container */
-  max-width: 100%;       /* prevents overflow */
+  width: 100%;
+  max-width: 100%;
   padding: 0.3em;
   font-size: 16px;
   color: black;
@@ -128,22 +128,25 @@
 .config_input_text {
   padding: 0.5em;
   background-color: white;
-  border-radius: 10px;
   width: 100%;
 }
 
-.config_container {
+.config_container_main {
   display:flex;
-  gap: 1em;
+  gap: 2em;
   flex-direction: column;
   user-select: text;
 }
 
-.config_row_container {
+.config_container {
   display: flex;
-  flex-direction: row;
   justify-content: flex-start;
+  flex-direction: column;
   gap: 1em;
+}
+
+.row {
+  flex-direction: row;
 }
 
 .config_button {
@@ -151,13 +154,13 @@
   border-radius: 10px;
   border:none;
   color: black;
-  background-color: hsl(97.73deg 100% 50%);
+  background-color: hsl(0, 0%, 100%);
   cursor: pointer;
   width: fit-content;
 }
 
 .config_button:hover{
-  background-color: hsl(142deg 76% 48%);
+  background-color: hsl(0, 0%, 80%);
 }
 
 .config_text_label {

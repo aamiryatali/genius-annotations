@@ -42,7 +42,7 @@ const App: React.FC = () => {
 
   			  	{description !== "" && <Description text={description}></Description>}
   			  	<Lyrics lyrics={lyrics} annotations={annotations}></Lyrics>
-				<p>Lyrics provided by Genius</p>
+				<p>Data sourced from Genius</p>
 				<a href={url}>{url}</a>
   			</div>
 
