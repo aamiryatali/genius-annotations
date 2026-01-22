@@ -1,6 +1,6 @@
 {
   "name": "genius-annotations",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "build": "spicetify-creator",
@@ -15,7 +15,6 @@
     "spicetify-creator": "^1.0.17"
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.18",
-    "tailwindcss": "^4.1.18"
+    "idb": "^8.0.3"
   }
 }

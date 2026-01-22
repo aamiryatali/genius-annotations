@@ -5,10 +5,13 @@ function checkSongMatch(title: string, name: string, artist: string): boolean {
     const normalizedName = normalize(name);
     const normalizedArtist = normalize(artist);
 
-    return (
-      normalizedTitle.includes(normalizedName) &&
-      normalizedTitle.includes(normalizedArtist)
-    );
+    const nameWords = normalizedName.split(" ").filter(Boolean);
+    const artistWords = normalizedArtist.split(" ").filter(Boolean);
+
+    const nameMatches = nameWords.every(word => normalizedTitle.includes(word));
+    const artistMatches = artistWords.every(word => normalizedTitle.includes(word));
+
+    return nameMatches && artistMatches;
 }
 
 function formatAnnotations(annotations: Annotation[]){
@@ -21,7 +24,8 @@ function formatAnnotations(annotations: Annotation[]){
 
 function formatLyrics(rawLyrics: Element){
     const lyrics = extractLyrics(rawLyrics).map(normalizeQuotes)
-    const lyricsMap = new Map(lyrics.map((line, i) => [i, line]));
+    let lyricsMap = new Map<number, string>();
+    lyricsMap = new Map(lyrics.map((line, i) => [i, line]));
     return lyricsMap
 }
 
@@ -43,7 +47,7 @@ function normalize(string: string): string {
 function getRawLyrics(preloadedState: any){ //Its complex JSON so :any will have to suffice
     const lyricsHtml = preloadedState.songPage.lyricsData.body.html;
     const doc = new DOMParser().parseFromString(lyricsHtml, "text/html");
-    const lyricsData = doc.querySelector("p");
+    const lyricsData = doc.querySelector("p") ?? new Element();
     return lyricsData;
 }
 
@@ -83,4 +87,31 @@ function extractLyrics(lyricsData: Element){
     return lyrics;
 }
 
-export { extractLyrics, formatAnnotations, formatLyrics, getRawLyrics, getDescription, checkSongMatch, normalize}
+function parseJSStringLiteralJSON(jsStringLiteral: String){
+    jsStringLiteral = jsStringLiteral.slice(1, -1);
+
+    let jsonString = jsStringLiteral
+        .replace(/\\\\/g, '\\')
+        .replace(/\\"/g, '"')
+        .replace(/\\'/g, "'")
+        .replace(/\\n/g, '\n')
+        .replace(/\\r/g, '\r')
+        .replace(/\\t/g, '\t');
+
+    jsonString = jsonString.replace(/[\u0000-\u001F]/g, (c) => {
+        switch (c) {
+            case '\b': return '\\b';
+            case '\f': return '\\f';
+            case '\n': return '\\n';
+            case '\r': return '\\r';
+            case '\t': return '\\t';
+            default:
+                return '\\u' + c.charCodeAt(0).toString(16).padStart(4, '0');
+        }
+    });
+
+    jsonString = jsonString.replace(/\\(?!["\\/bfnrtu])/g, '\\\\');
+    return jsonString;
+}
+
+export { extractLyrics, formatAnnotations, formatLyrics, getRawLyrics, getDescription, checkSongMatch, normalize, parseJSStringLiteralJSON}

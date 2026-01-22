@@ -24,8 +24,8 @@
 }
 
 .translation_select {
-  width: 100%;           /* fills the container */
-  max-width: 100%;       /* prevents overflow */
+  width: 100%;
+  max-width: 100%;
   padding: 0.3em;
   font-size: 16px;
   color: black;
@@ -54,6 +54,8 @@
 .annotation_text {
   font-size: 17px;
   color: black;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .lyrics_text {
@@ -91,7 +93,7 @@
   justify-content: center;
   flex-direction: column;
   text-align: left;
-  border: 2px solid hsl(142deg 76% 38%);
+  border: 2px solid hsl(142deg 76% 48%);
   border-radius: 10px;
 }
 
@@ -122,3 +124,47 @@
   opacity: 0;
   pointer-events: none;
 }
+
+.config_input_text {
+  padding: 0.5em;
+  background-color: white;
+  width: 100%;
+}
+
+.config_container_main {
+  display:flex;
+  gap: 2em;
+  flex-direction: column;
+  user-select: text;
+}
+
+.config_container {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.row {
+  flex-direction: row;
+}
+
+.config_button {
+  padding: 7px 10px 7px 10px;
+  border-radius: 10px;
+  border:none;
+  color: black;
+  background-color: hsl(0, 0%, 100%);
+  cursor: pointer;
+  width: fit-content;
+}
+
+.config_button:hover{
+  background-color: hsl(0, 0%, 80%);
+}
+
+.config_text_label {
+  font-size: 20px;
+}
+
+

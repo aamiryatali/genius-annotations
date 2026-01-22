@@ -1,16 +1,10 @@
 # Genius Annotations & Lyrics
 Displays the current song's lyrics, annotations and description sourced from [Genius](https://genius.com)  
-Includes a list of available translations, as well as the link to the song page on Genius at the bottom of the lyrics.
+Includes a list of available translations, as well as the link to the song page on Genius at the bottom of the lyrics.  
+Requires [Spicetify](https://spicetify.app/) installed to use.
 
-# Installation
-## Install Spicetify (if not installed already)
-1. Open Powershell
-2. Run:
-```
-iwr -useb https://raw.githubusercontent.com/spicetify/cli/main/install.ps1 | iex
-```
+## Installation
 
-## Install Custom App: 
 ### Automatic (Windows, Powershell)
 1. Open Powershell
 2. Run:
@@ -27,15 +21,23 @@ spicetify config custom_apps genius-annotations
 spicetify apply
 ```
 Done.  
-If installation was successful, this button should appear on the top left of Spotify:  
-<img src="resources/icon.png" width="50" height="50" />
+
+### Usage
+Use the app by clicking its icon on the top left of Spotify (circled red in this image)  
+<img src="resources/iconLocation.png"/>  
+
+Available translations can be selected from the dropdown at the top of the lyrics page.
+Lyrics with annotations will be highlighted green. Click them to see the annotation.  
 
 ## Previews
-### Description, lyrics and annotations
-<img src="resources/mainPreview.png" width="500" height="500"/>
+<img src="resources/previewGif.gif" width="500" height="500"/>  
 
-### Translations
-<img src="resources/translationPreview.png" width="500" height="500" />
+<img src="resources/translationPreview.png" width="500" height="500" />  
 
-### Annotations
-<img src="resources/annotationPreview.png" width="500" height="500" />
+<img src="resources/annotationPreview.png" width="500" height="500" />  
+
+## Updating
+Copy and run the powershell command from the app's config panel.  
+The app will automatically check for updates on launch.  
+<img src="resources/configLocation.png" width="500"/>
+<img src="resources/configPreview.png" width="500" height="500">
