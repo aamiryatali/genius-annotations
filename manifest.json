@@ -1,7 +1,7 @@
 {
     "name": "Genius Annotations & Lyrics",
     "description": "Displays the annotations, lyrics and description of the current song sourced from Genius",
-    "preview": "resources/previewGif.png",
+    "preview": "resources/previewGif.gif",
     "readme": "README.md",
     "authors": [
         { "name": "MelonThug", "url": "https://github.com/aamiryatali" }
