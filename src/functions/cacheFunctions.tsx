@@ -17,7 +17,6 @@ export async function cacheSong(songId: number, lyrics: Map<number, string>, des
         url: url,
         cachedAt: Date.now()
     });
-    //console.log(`Cached song data for songId: ${songId}`)
 }
 
 export async function cacheAnnotations(songId: number, annotations: Map<string, Annotation>){
@@ -26,7 +25,6 @@ export async function cacheAnnotations(songId: number, annotations: Map<string, 
         songId, 
         annotations: Array.from(annotations.entries()), 
         cachedAt: Date.now()});
-    //console.log(`Cached annotations for songId: ${songId}`)
 }
 
 export async function cacheSearchHits(query: string, hits: Map<number, string>){
@@ -36,7 +34,6 @@ export async function cacheSearchHits(query: string, hits: Map<number, string>){
         hits: Array.from(hits.entries()),
         cachedAt: Date.now()
     });
-    //console.log(`Cached search hits for query: ${query}`)
 }
 
 export async function getCachedTrack(uri: string){
@@ -49,7 +46,7 @@ export async function getCachedTrack(uri: string){
         await db.delete('tracks', uri);
         return null;
     }
-    //console.log(`Retrieving cached track for ${uri}`)
+
     return entry;
 }
 
@@ -64,7 +61,7 @@ export async function getCachedSong(songId: number) {
         await db.delete('songs', songId);
         return null;
     }
-    //console.log(`Retrieving cached song data for songId: ${songId}`)
+
     return entry;
 }
 
@@ -79,7 +76,7 @@ export async function getCachedAnnotations(songId: number){
         return null;
     }
 
-    //console.log(`Retrieving cached annotations for songId: ${songId}`)
+
     return entry
 }
 
@@ -94,7 +91,6 @@ export async function getCachedSearchHits(query: string){
         return null;
     }
 
-    //console.log(`Retrieving cached search hits for ${query}`)
     return entry;
 }
 
