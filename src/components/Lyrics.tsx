@@ -14,7 +14,7 @@ export default function Lyrics({lyrics, annotations}: {lyrics: Map<number, strin
                     if(line === "") return " ";
 
                     const normalized = line.toLowerCase();
-                    const annotation = annotations.get(normalized);
+                    const annotation = new Map<string, Annotation>(annotations).get(normalized);
                     return (
                         <>
                             <span

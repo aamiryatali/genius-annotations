@@ -1,16 +1,18 @@
 import styles from './css/app.module.scss'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Lyrics from './components/Lyrics';
 import Description from './components/Description';
 import { usePlayerState } from './hooks/usePlayerState';
 import { useSearchSong } from './hooks/useSearchSong';
 import { useSongData } from './hooks/useSongData';
+import { shouldCacheTrack } from './functions/cacheFunctions';
 
 const App: React.FC = () => {
+	const doCache = useRef<boolean>(false);
 	const [isLoading, setIsLoading] = useState(true);  	
 	const {playerState, debounceRef} = usePlayerState(setIsLoading, 727);
-	const {selectedSongId, setSelectedSongId, searchHits} = useSearchSong(setIsLoading, playerState);
-	const {lyrics, annotations, description, url} = useSongData(setIsLoading, selectedSongId);
+	const {selectedSongId, setSelectedSongId, searchHits} = useSearchSong(setIsLoading, playerState, () => doCache.current);
+	const {lyrics, annotations, description, url} = useSongData(setIsLoading, selectedSongId, () => doCache.current);
 
 	useEffect(() => {
 		const topBar = document.querySelector(".main-topBar-container");
@@ -19,6 +21,16 @@ const App: React.FC = () => {
 
 		return () => {topBar.classList.remove(styles.disabled)};
 	}, [])
+
+	useEffect(() => { 
+		if(!playerState?.item) return; 
+		const uri = playerState.item.uri.split(":").pop(); 
+		if(!uri) return; 
+
+		(async () => { 
+			doCache.current = await shouldCacheTrack(uri); 
+		})() 
+	}, [playerState]);
 
 	return (
   		<>

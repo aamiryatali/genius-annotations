@@ -24,7 +24,8 @@ function formatAnnotations(annotations: Annotation[]){
 
 function formatLyrics(rawLyrics: Element){
     const lyrics = extractLyrics(rawLyrics).map(normalizeQuotes)
-    const lyricsMap = new Map(lyrics.map((line, i) => [i, line]));
+    let lyricsMap = new Map<number, string>();
+    lyricsMap = new Map(lyrics.map((line, i) => [i, line]));
     return lyricsMap
 }
 
@@ -46,7 +47,7 @@ function normalize(string: string): string {
 function getRawLyrics(preloadedState: any){ //Its complex JSON so :any will have to suffice
     const lyricsHtml = preloadedState.songPage.lyricsData.body.html;
     const doc = new DOMParser().parseFromString(lyricsHtml, "text/html");
-    const lyricsData = doc.querySelector("p");
+    const lyricsData = doc.querySelector("p") ?? new Element();
     return lyricsData;
 }
 

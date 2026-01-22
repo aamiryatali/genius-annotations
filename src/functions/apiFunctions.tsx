@@ -93,10 +93,9 @@ async function getPreloadedState(id: number){
 
         let jsStringLiteral = match[1];
         const jsonString = parseJSStringLiteralJSON(jsStringLiteral);
-        console.log(jsonString);
         const preloadedState = JSON.parse(jsonString);
-        console.log(preloadedState);
         return preloadedState;
+        
     } catch (e) {
         console.error(`[Genius-Annotations] Error getting song data for ${fullUrl}`, e);
     }

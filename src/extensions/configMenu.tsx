@@ -1,7 +1,8 @@
 import { config } from '../configDefaults';
 import styles from '../css/app.module.scss'
+import { calcCacheSize, cleanupCache, clearCache, getCacheStats } from './caching';
 const { React, ReactDOM } = Spicetify;
-const { useState } = React;
+const { useState, useEffect } = React;
 
 type VersionInfo = {
   isOutdated: boolean;
@@ -13,12 +14,23 @@ function ConfigPanel({versionInfoParam}: {versionInfoParam: VersionInfo}){
     const [checkedForUpdates, setCheckedForUpdates] = useState(false);
     const [versionInfo, setVersionInfo] = useState(versionInfoParam);
     const [copiedCommand, setCopiedCommand] = useState(false);
-
+    const [clearedCache, setClearedCache] = useState(false);
+    const [cacheStats, setCacheStats] = useState({songs: 0, tracks: 0});
+    const [cacheSize, setCacheSize] = useState(-1);
     const [proxyUrl, setProxyUrl] = useState(() => {
         const proxy = Spicetify.LocalStorage.get("genius-annotations-proxy")
         if(proxy === null) Spicetify.LocalStorage.set("genius-annotations-proxy", config.PROXY);
         return proxy !== null ? proxy : config.PROXY;
     });
+
+    useEffect(() => {
+      async function fetchCacheStats() {
+        const stats = await getCacheStats();
+        setCacheStats(stats);
+      }
+
+      fetchCacheStats();
+    }, [])
 
     return (
     <><div className={styles.config_container_main}>
@@ -74,6 +86,40 @@ function ConfigPanel({versionInfoParam}: {versionInfoParam: VersionInfo}){
             />
         </div>
 
+        <div className={styles.config_container}>
+            <p className={styles.config_text_label}>Cache</p>
+            <sub>Data for frequently viewed songs are cached for faster retrieval and reduced API requests.</sub>
+            <sub>Songs cached: <code>{cacheStats.songs || 0}</code></sub>
+            <sub>Track references: <code>{cacheStats.tracks || 0}</code></sub>
+
+            {cacheSize !== -1 ? 
+            <sub>Cache size: <code>  ~{cacheSize}Kb</code></sub>
+            : ""}
+
+            <div className={`${styles.config_container} ${styles.row}`}>
+                <button
+                className={styles.config_button}
+                onClick={async () => {
+                    setCacheSize(await calcCacheSize());
+                }}>
+                Calculate Size
+                </button>
+                <button
+                className={styles.config_button}
+                onClick={async () => {
+                    clearCache();
+                    setClearedCache(true);
+                    setCacheSize(await calcCacheSize());
+                    setCacheStats(getCacheStats());
+                    setTimeout(() => setClearedCache(false), 2000)
+                }}>
+                Clear Cache
+                </button>
+            </div>
+
+            {clearedCache && <sub>Cleared cache!</sub>}
+        </div>
+
         <div className={`${styles.config_container} ${styles.row}`}>
                 <button 
                 className={styles.config_button} 
@@ -102,8 +148,7 @@ async function checkForUpdates(){
     const response = await fetch(`https://api.github.com/repos/${repo}/releases/latest`);
     const data = await response.json();
     const latestVersion = data.tag_name;
-    console.log(latestVersion)
-    console.log(config.VERSION)
+
     const isOutdated = latestVersion !== config.VERSION
 
     return { isOutdated, latestVersion, downloadUrl: data.assets[0].browser_download_url}
@@ -124,8 +169,9 @@ function openConfigMenu(versionInfo: VersionInfo){
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     const versionInfo = await checkForUpdates();
-    
+    cleanupCache();
     injectStylesheet();
+
     const item = new Spicetify.Menu.Item(
         versionInfo.isOutdated ? "Genius Annotations (Update Available)" : "Genius Annotations", 
         false, 
