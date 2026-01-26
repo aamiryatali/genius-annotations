@@ -2,9 +2,10 @@ import styles from '../css/app.module.scss'
 import React, { useState } from "react"
 import { Annotation } from '../types/annotation';
 
-export default function Lyrics({lyrics, annotations}: {lyrics: Map<number, string>, annotations: Map<string, Annotation>}){
+export default function Lyrics({lyrics, annotations}: {lyrics: Map<number, string>|null, annotations: Map<string, Annotation>|null}){
     const [hoveredAnnotationId, setHoveredAnnotationId] = useState<number | null>(null);
     const [selectedAnnotation, setSelectedAnnotation] = useState<{annotationId: number, lyricIndex: number} | null>();
+    if(!lyrics || lyrics?.size === 0) return;
 
     return (
             <div className={styles.lyrics_container} onClick={() => setSelectedAnnotation(null)}>

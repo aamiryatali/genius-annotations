@@ -5,7 +5,6 @@ export default function TranslationSelect(
     {searchHits, selectedSongId, setSelectedSongId}: 
     {searchHits: Map<number, string>, selectedSongId: number, setSelectedSongId: React.Dispatch<React.SetStateAction<number | null>>}
 ){
-
     return (
         <>
             <div className={styles.translation_container}>

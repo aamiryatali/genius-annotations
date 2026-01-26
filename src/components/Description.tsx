@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import styles from '../css/app.module.scss'
 
-export default function Description({text}: {text: string}){
+export default function Description({text}: {text: string|null}){
     const [isExpanded, setIsExpanded] = useState(false);
     const descPreviewLength = 300;
+    if(!text) return;
 
     return (
         <>

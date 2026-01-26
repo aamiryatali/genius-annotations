@@ -1,13 +1,13 @@
 import React, { cache, useState } from "react"
 import styles from '../css/app.module.scss'
 
-export default function Footer({url}: {url: string}){
+export default function Footer({url}: {url: string|null}){
+    if(!url) return;
+
     return (
         <>
-            <div> 
-				<p>Data sourced from Genius</p>
-				<a href={url}>{url}</a>
-			</div>
+			<p>Data sourced from Genius</p>
+			<a href={url}>{url}</a>
         </>
     )
 }

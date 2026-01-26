@@ -1,14 +1,14 @@
 import { Annotation } from "../types/annotation";
 import { checkSongMatch, normalize, parseJSStringLiteralJSON } from "./parsingFunctions";
 
-async function searchSong(name: string, artist: string){
+async function fetchSongHits(name: string, artist: string, signal?: AbortSignal){
     const query = new URLSearchParams({q: `${artist} ${normalize(name)}`});
     const proxy = Spicetify.LocalStorage.get("genius-annotations-proxy");
     const fullUrl = proxy + `https://api.genius.com/search?${query.toString()}`
     const hits = new Map<number, string>();
 
     try {
-        const response = await fetch(fullUrl);
+        const response = await fetch(fullUrl, {signal});
         if (!response.ok) {
             console.warn(`[Genius-Annotations] HTTP error ${response.status} for ${fullUrl}`);
             return hits;
@@ -32,14 +32,14 @@ async function searchSong(name: string, artist: string){
     return hits;
 }
 
-async function getRawAnnotations(id: number){
+async function fetchRawAnnotations(id: number, signal?: AbortSignal){
     const geniusUrl = `?song_id=${id.toString()}&text_format=plain&per_page=50`
     const proxy = Spicetify.LocalStorage.get("genius-annotations-proxy");
     const fullUrl = proxy + `https://api.genius.com/referents${encodeURIComponent(geniusUrl)}`;
     let annotations: Annotation[] = [];
 
     try {
-        const response = await fetch(fullUrl)
+        const response = await fetch(fullUrl, {signal})
         if (!response.ok) {
             console.warn(`[Genius-Annotations] HTTP error ${response.status} for ${fullUrl}`);
             return annotations;
@@ -65,12 +65,12 @@ async function getRawAnnotations(id: number){
     return annotations
 }
 
-async function getPreloadedState(id: number){
+async function fetchPreloadedState(id: number, signal?: AbortSignal){
     const proxy = Spicetify.LocalStorage.get("genius-annotations-proxy")
     const fullUrl = proxy + `https://genius.com/songs/${id.toString()}`;
 
     try {
-        const response = await fetch(fullUrl)
+        const response = await fetch(fullUrl, {signal})
         if (!response.ok) {
             console.warn(`[Genius-Annotations] HTTP error ${response.status} for ${fullUrl}`);
             return
@@ -102,4 +102,4 @@ async function getPreloadedState(id: number){
 }
 
 
-export {searchSong, getPreloadedState, getRawAnnotations}
+export {fetchSongHits, fetchPreloadedState, fetchRawAnnotations}

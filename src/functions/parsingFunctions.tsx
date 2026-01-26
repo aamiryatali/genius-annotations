@@ -22,7 +22,8 @@ function formatAnnotations(annotations: Annotation[]){
     return annotationsMap;
 }
 
-function formatLyrics(rawLyrics: Element){
+function formatLyrics(rawLyrics: Element|null){
+    if(!rawLyrics) return new Map();
     const lyrics = extractLyrics(rawLyrics).map(normalizeQuotes)
     let lyricsMap = new Map<number, string>();
     lyricsMap = new Map(lyrics.map((line, i) => [i, line]));
@@ -45,13 +46,15 @@ function normalize(string: string): string {
 }
 
 function getRawLyrics(preloadedState: any){ //Its complex JSON so :any will have to suffice
+    if(!preloadedState) return null;
     const lyricsHtml = preloadedState.songPage.lyricsData.body.html;
     const doc = new DOMParser().parseFromString(lyricsHtml, "text/html");
-    const lyricsData = doc.querySelector("p") ?? new Element();
+    const lyricsData = doc.querySelector("p") ?? null;
     return lyricsData;
 }
 
 function getDescription(preloadedState: any){ 
+    if(!preloadedState) return "";
     const annotationKey = Object.keys(preloadedState.entities.annotations)[0]
     const descriptionHtml = preloadedState.entities.annotations[annotationKey].body.html;
     const doc = new DOMParser().parseFromString(descriptionHtml, "text/html");
