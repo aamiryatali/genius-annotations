@@ -61,12 +61,22 @@ function getDescription(preloadedState: any){
 
 function extractLyrics(lyricsData: Element){
     let lyrics: string[] = [];
+    let lyricsBegan = false;
+
     for(const node of lyricsData.childNodes) {
+        if (!lyricsBegan) {
+            if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim() || node.nodeName === "A") {
+                lyricsBegan = true;
+            } else if (node.nodeName === "BR") {
+                continue;
+            }
+        }
+
         if(node.nodeType === Node.TEXT_NODE) {
             node.textContent && lyrics.push(node.textContent.trim());
         }
 
-        if(node.nodeName === "BR") {
+        if(node.nodeName === "BR" && lyricsBegan) {
             lyrics.push("\n");
         }
 

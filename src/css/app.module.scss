@@ -83,6 +83,8 @@
   align-items: center;
   text-align: center;
   padding: 1em;
+  user-select: text;
+  cursor: default;
 }
 
 .description_container {
@@ -95,6 +97,7 @@
   text-align: left;
   border: 2px solid hsl(142deg 76% 48%);
   border-radius: 10px;
+  user-select: text;
 }
 
 .description_text {
@@ -165,6 +168,14 @@
 
 .config_text_label {
   font-size: 20px;
+}
+
+.config_text_container {
+  display: flex;
+  gap: 0.2em;
+  margin: 0;
+  padding: 0;
+  flex-direction: column;
 }
 
 

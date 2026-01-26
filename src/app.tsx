@@ -6,6 +6,8 @@ import { usePlayerState } from './hooks/usePlayerState';
 import { useSearchSong } from './hooks/useSearchSong';
 import { useSongData } from './hooks/useSongData';
 import { shouldCacheTrack } from './functions/cacheFunctions';
+import TranslationSelect from './components/TranslationSelect';
+import Footer from './components/Footer';
 
 const App: React.FC = () => {
 	const doCache = useRef<boolean>(false);
@@ -42,20 +44,10 @@ const App: React.FC = () => {
     	) : selectedSongId ? 
 		(
 			<div className={styles.container}>
-				<div className={styles.translation_container}>
-					<select className={styles.translation_select} value={selectedSongId ?? ""} 
-					onChange={async (e) => {setSelectedSongId(Number(e.target.value));
-  					}}>
-						{[...searchHits].map(([id, title]) => (
-							<option className={styles.translation_item} key={id} value={id}>{title}</option>
-						))}
-					</select>
-				</div>
-
-  			  	{description !== "" && <Description text={description}></Description>}
+				<TranslationSelect searchHits={searchHits} selectedSongId={selectedSongId} setSelectedSongId={setSelectedSongId}></TranslationSelect>
+  			  	<Description text={description}></Description>
   			  	<Lyrics lyrics={lyrics} annotations={annotations}></Lyrics>
-				<p>Data sourced from Genius</p>
-				<a href={url}>{url}</a>
+				<Footer url={url}></Footer>
   			</div>
 
 		 ) : !debounceRef.current && !isLoading && (

@@ -25,8 +25,8 @@ function ConfigPanel({versionInfoParam}: {versionInfoParam: VersionInfo}){
 
     useEffect(() => {
       async function fetchCacheStats() {
-        const stats = await getCacheStats();
-        setCacheStats(stats);
+        setCacheStats(await getCacheStats());
+        setCacheSize(await calcCacheSize());
       }
 
       fetchCacheStats();
@@ -34,15 +34,21 @@ function ConfigPanel({versionInfoParam}: {versionInfoParam: VersionInfo}){
 
     return (
     <><div className={styles.config_container_main}>
+
         <div className={styles.config_container}>
             <p className={styles.config_text_label}>Check for updates</p>
-            
-            {versionInfo.isOutdated ?
-            <>
-            <sub>Update available! Powershell install command:</sub>
-            <code>{config.INSTALL_COMMAND}</code>
-            </> : checkedForUpdates && <sub>No new updates found</sub>
-            }
+
+            <div className={styles.config_text_container}>
+                <sub>Current Version: {config.VERSION}</sub>
+                {versionInfo.isOutdated ?
+                    <>
+                    <sub>Update available! ({versionInfo.latestVersion})</sub>
+                    <sub>Powershell install command:</sub>
+                    <code>{config.INSTALL_COMMAND}</code>
+                    </> 
+                : checkedForUpdates && <sub>No new updates found</sub>
+                }
+            </div>
 
             <div className={`${styles.config_container} ${styles.row}`}>
                 <button 
@@ -88,22 +94,17 @@ function ConfigPanel({versionInfoParam}: {versionInfoParam: VersionInfo}){
 
         <div className={styles.config_container}>
             <p className={styles.config_text_label}>Cache</p>
-            <sub>Data for frequently viewed songs are cached for faster retrieval and reduced API requests.</sub>
-            <sub>Songs cached: <code>{cacheStats.songs || 0}</code></sub>
-            <sub>Track references: <code>{cacheStats.tracks || 0}</code></sub>
+            <div className={styles.config_text_container}>
+                <sub>Data for frequently viewed songs are cached for faster retrieval and reduced API requests.</sub>
+                <sub>Songs cached: <code>{cacheStats.songs || 0}</code></sub>
+                <sub>Track references: <code>{cacheStats.tracks || 0}</code></sub>
 
-            {cacheSize !== -1 ? 
-            <sub>Cache size: <code>  ~{cacheSize}Kb</code></sub>
-            : ""}
-
+                {cacheSize !== -1 ? 
+                <sub>Cache size: <code>  ~{cacheSize}Kb</code></sub>
+                : ""}
+                {clearedCache && <sub>Cleared cache!</sub>} 
+            </div>
             <div className={`${styles.config_container} ${styles.row}`}>
-                <button
-                className={styles.config_button}
-                onClick={async () => {
-                    setCacheSize(await calcCacheSize());
-                }}>
-                Calculate Size
-                </button>
                 <button
                 className={styles.config_button}
                 onClick={async () => {
@@ -116,8 +117,6 @@ function ConfigPanel({versionInfoParam}: {versionInfoParam: VersionInfo}){
                 Clear Cache
                 </button>
             </div>
-
-            {clearedCache && <sub>Cleared cache!</sub>}
         </div>
 
         <div className={`${styles.config_container} ${styles.row}`}>

@@ -7,6 +7,7 @@ export default function Description({text}: {text: string}){
 
     return (
         <>
+            {text !== "" ? 
             <div className={styles.description_container}>
                 <u className={styles.title}>Description</u>
                 <p className={styles.description_text}>
@@ -16,6 +17,7 @@ export default function Description({text}: {text: string}){
                 <button className={styles.button} onClick={() => setIsExpanded(!isExpanded)}>{isExpanded ? "Read Less" : "Read More"}</button>
                 }
             </div>
+            : ""}
         </>
     )
 }
