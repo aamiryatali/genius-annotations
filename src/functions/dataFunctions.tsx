@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatAnnotations, formatLyrics, getDescription, getRawLyrics, normalize } from "./parsingFunctions";
-import { cacheAnnotations, cacheSearchHits, cacheSong, getCachedAnnotations, getCachedSearchHits, getCachedSong } from "./cacheFunctions";
+import { cacheSearchHits, cacheSong, getCachedSearchHits, getCachedSong } from "./cacheFunctions";
 import { fetchPreloadedState, fetchRawAnnotations, fetchSongHits } from "./apiFunctions";
 import { SongData } from "../types/songData";
 import { Annotation } from "../types/annotation";
@@ -27,8 +27,7 @@ async function getSearchHits(gen: number, playerState: Spicetify.PlayerState | n
 
     const cached = await getCachedSearchHits(query);
     if(cached){
-        const cacheHits = new Map<number, string>(cached.hits);
-        //setSelectedSongId(cacheHits?.keys().next().value ?? null) //Default select the first song
+        searchHits = new Map<number, string>(cached.hits);
         result.done = true;
         result.success = true;
         return {result, searchHits};
@@ -40,7 +39,7 @@ async function getSearchHits(gen: number, playerState: Spicetify.PlayerState | n
         result.success = true;
         return {result, searchHits};
     }
-    //setSelectedSongId(hits?.keys().next().value ?? null) //Default select the first song
+
     result.done = true;
     result.success = true;
     if(doCache()){
@@ -63,12 +62,11 @@ async function getSongData(gen: number, songId: number | null, doCache: () => bo
     const annotationController = new AbortController();
 
     const cachedSong = await getCachedSong(songId);
-    const cachedAnnotations = await getCachedAnnotations(songId);
     
-    if(cachedSong && cachedAnnotations){
-        songData.description = cachedSong.description ?? "";
-	    songData.lyrics = cachedSong.lyrics ?? [];
-	    songData.annotations = new Map<string, Annotation>(cachedAnnotations.annotations) ?? [];
+    if(cachedSong){
+        songData.description = cachedSong.description
+	    songData.lyrics = cachedSong.lyrics
+	    songData.annotations = cachedSong.annotations
         songData.url = cachedSong.url
         result.done = true;
         result.success = true;
@@ -88,15 +86,14 @@ async function getSongData(gen: number, songId: number | null, doCache: () => bo
 
     songData.id = songId;
 	songData.description = songDescription ?? ""
-	songData.lyrics = formattedLyrics ?? []
-	songData.annotations = formattedAnnotations ?? []
-    songData.url = songUrl;
+	songData.lyrics = formattedLyrics ?? null
+	songData.annotations = formattedAnnotations ?? null
+    songData.url = songUrl ?? null;
     result.done = true;
     result.success = true;
     
     if(doCache()){
-        await cacheSong(songData.id, songData.lyrics, songData.description, songData.url);
-        await cacheAnnotations(songData.id, songData.annotations);
+        await cacheSong(songData);
     }
 
     return {result, songData};

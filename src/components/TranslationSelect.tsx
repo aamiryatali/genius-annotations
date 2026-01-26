@@ -3,8 +3,9 @@ import styles from '../css/app.module.scss'
 
 export default function TranslationSelect(
     {searchHits, selectedSongId, setSelectedSongId}: 
-    {searchHits: Map<number, string>, selectedSongId: number, setSelectedSongId: React.Dispatch<React.SetStateAction<number | null>>}
+    {searchHits: Map<number, string>, selectedSongId: number|null, setSelectedSongId: React.Dispatch<React.SetStateAction<number | null>>}
 ){
+    if(!selectedSongId) return;
     return (
         <>
             <div className={styles.translation_container}>

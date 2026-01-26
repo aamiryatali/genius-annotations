@@ -6,8 +6,8 @@ export default function Footer({url}: {url: string|null}){
 
     return (
         <>
-			<p>Data sourced from Genius</p>
-			<a href={url}>{url}</a>
+            <p>Data sourced from Genius</p>
+		    <a href={url}>{url}</a>
         </>
     )
 }

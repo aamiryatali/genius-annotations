@@ -9,9 +9,6 @@ export const dbPromise = openDB('genius-annotations-cache', 1, {
         if(!db.objectStoreNames.contains('songs')) {
             db.createObjectStore('songs', {keyPath: 'songId'})
         }
-        if(!db.objectStoreNames.contains('annotations')) {
-            db.createObjectStore('annotations', {keyPath: 'songId'})
-        }
         if(!db.objectStoreNames.contains('searches')) {
             db.createObjectStore('searches', {keyPath: 'query'})
         }
@@ -20,7 +17,7 @@ export const dbPromise = openDB('genius-annotations-cache', 1, {
 
 export async function clearCache(): Promise<void> {
     const db = await dbPromise;
-    const stores = ['tracks', 'songs', 'annotations', 'searches'];
+    const stores = ['tracks', 'songs', 'searches'];
 
     for (const name of stores) {
         const transaction = db.transaction(name, "readwrite");
@@ -38,7 +35,6 @@ export async function cleanupCache(): Promise<void> {
     const now = Date.now();
     const stores = [
         { name: "songs", ttl: config.SONG_CACHE_TTL },
-        { name: "annotations", ttl: config.ANNOTATIONS_CACHE_TTL },
         { name: "searches", ttl: config.SEARCH_CACHE_TTL },
         { name: "tracks", ttl: config.TRACK_CACHE_TTL },
     ];
@@ -60,7 +56,7 @@ export async function cleanupCache(): Promise<void> {
 
 export async function getCacheStats(){
     const db = await dbPromise;
-    const stores = ['tracks', 'songs', 'annotations', 'searches'];
+    const stores = ['tracks', 'songs', 'searches'];
     const stats: Record<string, number> = {};
 
     for(const storeName of stores) {
@@ -76,7 +72,7 @@ export async function getCacheStats(){
 
 export async function calcCacheSize(){
     const db = await dbPromise;
-    const stores = ['tracks', 'songs', 'annotations', 'searches'];
+    const stores = ['tracks', 'songs', 'searches'];
     let total = 0;
     for(const storeName of stores){
         const transaction = db.transaction(storeName, 'readonly');

@@ -2,29 +2,23 @@ import { Annotation } from "../types/annotation";
 import { config } from "../configDefaults";
 import { dbPromise } from "../extensions/caching";
 import { approximateSize } from "../extensions/caching";
+import { SongData } from "../types/songData";
 
 export async function cacheTrack(uri: string, playCount: number = 0){
     const db = await dbPromise;
     await db.put('tracks', {uri, playCount, cachedAt: Date.now()})
 }
 
-export async function cacheSong(songId: number, lyrics: Map<number, string>, description: string, url: string){
+export async function cacheSong(data: SongData){
     const db = await dbPromise;
     await db.put('songs', {
-        songId,
-        lyrics: Array.from(lyrics.entries()),
-        description: description,
-        url: url,
+        songId: data.id,
+        lyrics: data.lyrics ? Array.from(data.lyrics.entries()) : null,
+        annotations: data.annotations ?? null,
+        description: data.description ?? "",
+        url: data.url ?? null,
         cachedAt: Date.now()
     });
-}
-
-export async function cacheAnnotations(songId: number, annotations: Map<string, Annotation>){
-    const db = await dbPromise;
-    await db.put('annotations', {
-        songId, 
-        annotations: Array.from(annotations.entries()), 
-        cachedAt: Date.now()});
 }
 
 export async function cacheSearchHits(query: string, hits: Map<number, string>){
@@ -63,21 +57,6 @@ export async function getCachedSong(songId: number) {
     }
 
     return entry;
-}
-
-export async function getCachedAnnotations(songId: number){
-    const db = await dbPromise;
-    const entry = await db.get('annotations', songId);
-    if(!entry) return null;
-
-    const ttl = config.ANNOTATIONS_CACHE_TTL;
-    if(Date.now() - entry.cachedAt > ttl){
-        await db.delete('annotations', songId);
-        return null;
-    }
-
-
-    return entry
 }
 
 export async function getCachedSearchHits(query: string){
