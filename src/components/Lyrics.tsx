@@ -4,7 +4,7 @@ import { Annotation } from '../types/annotation';
 
 export default function Lyrics({lyrics, annotations}: {lyrics: Map<number, string>|null, annotations: Map<string, Annotation>|null}){
     const [hoveredAnnotationId, setHoveredAnnotationId] = useState<number | null>(null);
-    const [selectedAnnotation, setSelectedAnnotation] = useState<{annotationId: number, lyricIndex: number} | null>();
+    const [selectedAnnotation, setSelectedAnnotation] = useState<{annotationId: number, lyricIndex: number} | null>(null);
     if(!lyrics || lyrics?.size === 0) return;
 
     return (
@@ -32,9 +32,14 @@ export default function Lyrics({lyrics, annotations}: {lyrics: Map<number, strin
                             onMouseEnter={() => annotation && setHoveredAnnotationId(annotation.id)}
                             onMouseLeave={() => setHoveredAnnotationId(null)}
                             onClick={(e) => {
-                                e.stopPropagation();
-                                isSelected && setSelectedAnnotation(null) // Deselect current if clicked again
-                                annotation && setSelectedAnnotation({annotationId: annotation?.id, lyricIndex: lyricIndex})}
+                                    e.stopPropagation();
+                                    const isAlreadySelected = selectedAnnotation?.annotationId === annotation?.id && selectedAnnotation?.lyricIndex === lyricIndex;
+                                    if(isAlreadySelected){
+                                        setSelectedAnnotation(null)
+                                    } else if(annotation){
+                                        setSelectedAnnotation({annotationId: annotation?.id, lyricIndex: lyricIndex})
+                                    }
+                                }
                             }
                             >
                                 {line + ' '}
